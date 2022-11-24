@@ -15,7 +15,7 @@ namespace SecondLab
             {
                 a(this.OneWayBind(ViewModel, vm => vm.DeserializedText, v => v.deserializedTextBox.Text));
                 a(this.OneWayBind(ViewModel, vm => vm.XMLFileContent, v => v.XMLFileTextBox.Text));
-                a(this.BindCommand(ViewModel, vm => vm.Start, v => v.startButton));
+                a(this.BindCommand(ViewModel, vm => vm.DeserializeXML, v => v.startButton));
             });
             ViewModel = new SLViewModel();
         }

@@ -6,34 +6,42 @@ namespace SecondLab
 {
     public class SLModel
     {
+        public abstract class XMLContent
+        {
+            public abstract string Read();
+        }
+
         [XmlRoot("shipOrder")]
-        public class Order
+        public class Order : XMLContent
         {
             [XmlElement("shipTo")]
             public OrderAdress Adress { get; set; }
             [XmlElement("items")]
-            public ItemList List { get; set; }
+            public ItemList Items { get; set; }
 
-            public override string ToString()
+            public override string Read() => Adress.Read() + Items.Read();
+
+            public override string ToString() => this.Read();
+        }
+
+        public class ItemList : XMLContent
+        {
+            [XmlElement("item")]
+            public List<OrderItem> Items { get; set; }
+
+            public override string Read()
             {
-                string result = string.Format("Customer Name: {0} \n", Adress.Name);
-                result += string.Format("   Shipping Address: {0}, {1}, {2} \n", Adress.Street, Adress.Address, Adress.Country);
-                result += "Ordered goods: ";
-                foreach (var item in List.Items)
+                string result = "Ordered goods:\n    ";
+                foreach (var item in Items)
                 {
-                    result += string.Format("       {0} ({1} pieces) for {2} \n", item.Title, item.Quantity, item.Price);
+                    result += item.Read();
+                    result += "\n    ";
                 }
                 return result;
             }
         }
 
-        public class ItemList
-        {
-            [XmlElement("item")]
-            public List<OrderItem> Items { get; set; }
-        }
-
-        public class OrderAdress
+        public class OrderAdress : XMLContent
         {
             [XmlElement("name")]
             public string Name { get; set; }
@@ -46,9 +54,16 @@ namespace SecondLab
 
             [XmlElement("country")]
             public string Country { get; set; }
+
+            public override string Read()
+            {
+                string result = string.Format("Customer Name:\n    {0} \n", Name);
+                result += string.Format("Shipping Address:\n    {0}, {1}, {2} \n", Street, Address, Country);
+                return result;
+            }
         }
 
-        public class OrderItem
+        public class OrderItem : XMLContent
         {
             [XmlElement("title")]
             public string Title { get; set; }
@@ -58,10 +73,24 @@ namespace SecondLab
 
             [XmlElement("price")]
             public string Price { get; set; }
+
+            public override string Read() => string.Format("{0} ({1} pieces) for {2}", Title, Quantity, Price);
         }
 
-        public static string StreamFile(FileStream stream) => new StreamReader(stream).ReadToEnd();
+        public static string StreamFile(string xmlFilePath)
+        {
+            using (FileStream stream = new FileStream(xmlFilePath, FileMode.Open))
+            {
+                return new StreamReader(stream).ReadToEnd();
+            }
+        }
 
-        public static Order DeserializeXML(FileStream stream) => (Order)new XmlSerializer(typeof(Order)).Deserialize(stream);
+        public static Order DeserializeXML(string xmlFilePath)
+        {
+            using (FileStream stream = new FileStream(xmlFilePath, FileMode.Open))
+            {
+                return (Order)new XmlSerializer(typeof(Order)).Deserialize(stream);
+            }
+        }
     }
 }

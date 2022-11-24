@@ -1,12 +1,13 @@
 ﻿using ReactiveUI;
-using System.IO;
 using System.Reactive;
 
 namespace SecondLab
 {
     public class SLViewModel : ReactiveObject
     {
-        private string _XMLFileContent;
+        private const string xmlFilePath = "./Resources/XMLFile.xml";
+
+        private string _XMLFileContent = SLModel.StreamFile(xmlFilePath);
         public string XMLFileContent
         {
             get => _XMLFileContent;
@@ -22,17 +23,12 @@ namespace SecondLab
 
         public SLViewModel()
         {
-            Start = ReactiveCommand.Create(() =>
+            DeserializeXML = ReactiveCommand.Create(() =>
             {
-                using (var stream = new FileStream("./Resources/XMLFile.xml", FileMode.Open))
-                {
-                    DeserializedText = SLModel.DeserializeXML(stream).ToString();
-                    stream.Position = 0;
-                    XMLFileContent = SLModel.StreamFile(stream);
-                }
+                DeserializedText = SLModel.DeserializeXML(xmlFilePath).ToString();
             });
         }
 
-        public ReactiveCommand<Unit, Unit> Start { get; private set; }
+        public ReactiveCommand<Unit, Unit> DeserializeXML { get; private set; }
     }
 }

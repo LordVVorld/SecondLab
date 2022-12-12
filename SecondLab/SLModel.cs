@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace SecondLab
@@ -92,5 +95,49 @@ namespace SecondLab
                 return (Order)new XmlSerializer(typeof(Order)).Deserialize(stream);
             }
         }
+
+        public static string GetFilePath(OpenFileDialog fileDialog)
+        {
+            DialogResult result = fileDialog.ShowDialog();
+            switch (result)
+            {
+                case DialogResult.OK:
+                    {
+                        if (IsXMLExtention(fileDialog.FileName))
+                        {
+                            return fileDialog.FileName;
+                        }
+                        throw new ExtentionException("Некорректное расширение файла.");
+                    }
+                case DialogResult.Cancel:
+                    {
+                        if (IsXMLExtention(fileDialog.FileName))
+                        {
+                            return fileDialog.FileName;
+                        }
+                        return null;
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
+        }
+
+        private static bool IsXMLExtention(string path) => string.Equals(
+                            Path.GetExtension(path),
+                            ".xml",
+                            StringComparison.OrdinalIgnoreCase);
+
+        public class ExtentionException : Exception
+        {
+            internal string _message;
+            public ExtentionException(string message) : base(message)
+            {
+                _message = message;
+            }
+        }
     }
+
+
 }

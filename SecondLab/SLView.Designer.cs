@@ -32,15 +32,18 @@
             System.Windows.Forms.Label deserializedLabel;
             this.XMLFileTextBox = new System.Windows.Forms.RichTextBox();
             this.deserializedTextBox = new System.Windows.Forms.RichTextBox();
-            this.startButton = new System.Windows.Forms.Button();
+            this.actionMenu = new System.Windows.Forms.MenuStrip();
+            this.chooseFileButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.deserializeButton = new System.Windows.Forms.ToolStripMenuItem();
             XMLFileLabel = new System.Windows.Forms.Label();
             deserializedLabel = new System.Windows.Forms.Label();
+            this.actionMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // XMLFileLabel
             // 
             XMLFileLabel.AutoSize = true;
-            XMLFileLabel.Location = new System.Drawing.Point(15, 10);
+            XMLFileLabel.Location = new System.Drawing.Point(15, 33);
             XMLFileLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             XMLFileLabel.Name = "XMLFileLabel";
             XMLFileLabel.Size = new System.Drawing.Size(132, 24);
@@ -50,7 +53,7 @@
             // deserializedLabel
             // 
             deserializedLabel.AutoSize = true;
-            deserializedLabel.Location = new System.Drawing.Point(505, 10);
+            deserializedLabel.Location = new System.Drawing.Point(383, 33);
             deserializedLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             deserializedLabel.Name = "deserializedLabel";
             deserializedLabel.Size = new System.Drawing.Size(136, 24);
@@ -60,34 +63,49 @@
             // XMLFileTextBox
             // 
             this.XMLFileTextBox.Font = new System.Drawing.Font("Alegreya SC", 9.749998F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.XMLFileTextBox.Location = new System.Drawing.Point(15, 40);
+            this.XMLFileTextBox.Location = new System.Drawing.Point(15, 63);
             this.XMLFileTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.XMLFileTextBox.Name = "XMLFileTextBox";
             this.XMLFileTextBox.ReadOnly = true;
-            this.XMLFileTextBox.Size = new System.Drawing.Size(360, 505);
+            this.XMLFileTextBox.Size = new System.Drawing.Size(360, 483);
             this.XMLFileTextBox.TabIndex = 0;
             this.XMLFileTextBox.Text = "";
             // 
             // deserializedTextBox
             // 
             this.deserializedTextBox.Font = new System.Drawing.Font("Alegreya SC", 9.749998F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.deserializedTextBox.Location = new System.Drawing.Point(505, 40);
+            this.deserializedTextBox.Location = new System.Drawing.Point(383, 63);
             this.deserializedTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.deserializedTextBox.Name = "deserializedTextBox";
             this.deserializedTextBox.ReadOnly = true;
-            this.deserializedTextBox.Size = new System.Drawing.Size(360, 505);
+            this.deserializedTextBox.Size = new System.Drawing.Size(360, 483);
             this.deserializedTextBox.TabIndex = 1;
             this.deserializedTextBox.Text = "";
             // 
-            // startButton
+            // actionMenu
             // 
-            this.startButton.Location = new System.Drawing.Point(380, 40);
-            this.startButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(120, 45);
-            this.startButton.TabIndex = 4;
-            this.startButton.Text = "Deserialize";
-            this.startButton.UseVisualStyleBackColor = true;
+            this.actionMenu.BackColor = System.Drawing.Color.LemonChiffon;
+            this.actionMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.chooseFileButton,
+            this.deserializeButton});
+            this.actionMenu.Location = new System.Drawing.Point(0, 0);
+            this.actionMenu.Name = "actionMenu";
+            this.actionMenu.Size = new System.Drawing.Size(759, 32);
+            this.actionMenu.TabIndex = 5;
+            // 
+            // chooseFileButton
+            // 
+            this.chooseFileButton.Font = new System.Drawing.Font("Alegreya SC", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chooseFileButton.Name = "chooseFileButton";
+            this.chooseFileButton.Size = new System.Drawing.Size(123, 28);
+            this.chooseFileButton.Text = "Выбрать файл";
+            // 
+            // deserializeButton
+            // 
+            this.deserializeButton.Font = new System.Drawing.Font("Alegreya SC", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.deserializeButton.Name = "deserializeButton";
+            this.deserializeButton.Size = new System.Drawing.Size(150, 28);
+            this.deserializeButton.Text = "Десериализовать";
             // 
             // SLView
             // 
@@ -95,17 +113,20 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LemonChiffon;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(884, 561);
-            this.Controls.Add(this.startButton);
+            this.ClientSize = new System.Drawing.Size(759, 561);
             this.Controls.Add(deserializedLabel);
             this.Controls.Add(XMLFileLabel);
             this.Controls.Add(this.XMLFileTextBox);
             this.Controls.Add(this.deserializedTextBox);
+            this.Controls.Add(this.actionMenu);
             this.Font = new System.Drawing.Font("Alegreya SC", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.actionMenu;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "SLView";
             this.Text = "Deserializer";
+            this.actionMenu.ResumeLayout(false);
+            this.actionMenu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -115,7 +136,9 @@
 
         private System.Windows.Forms.RichTextBox XMLFileTextBox;
         private System.Windows.Forms.RichTextBox deserializedTextBox;
-        private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.MenuStrip actionMenu;
+        private System.Windows.Forms.ToolStripMenuItem chooseFileButton;
+        private System.Windows.Forms.ToolStripMenuItem deserializeButton;
     }
 }
 

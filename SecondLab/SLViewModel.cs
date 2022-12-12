@@ -1,13 +1,17 @@
 ﻿using ReactiveUI;
 using System.Reactive;
+using System.Windows.Forms;
+using System;
+using static SecondLab.SLModel;
 
 namespace SecondLab
 {
     public class SLViewModel : ReactiveObject
     {
-        private const string xmlFilePath = "./Resources/XMLFile.xml";
+        private readonly OpenFileDialog _fileChooser = new OpenFileDialog() { Filter = "XML Files (*.xml)|*.xml" };
+        private string _path = null;
 
-        private string _XMLFileContent = SLModel.StreamFile(xmlFilePath);
+        private string _XMLFileContent;
         public string XMLFileContent
         {
             get => _XMLFileContent;
@@ -23,12 +27,28 @@ namespace SecondLab
 
         public SLViewModel()
         {
+            ChooseFile = ReactiveCommand.Create(() =>
+            {
+                _path = GetFilePath(_fileChooser);
+                if (!string.IsNullOrEmpty(_path))
+                {
+                    XMLFileContent = StreamFile(_path);
+                }            
+            });
+            ChooseFile.ThrownExceptions.Subscribe(ex => MessageBox.Show(ex.Message, "Внимание!"));
+
             DeserializeXML = ReactiveCommand.Create(() =>
             {
-                DeserializedText = SLModel.DeserializeXML(xmlFilePath).ToString();
+                if (string.IsNullOrEmpty(_path))
+                {
+                    throw new Exception("Не выбран файл для десериализации.");
+                }
+                XMLFileContent = StreamFile(_path);
+                DeserializedText = DeserializeXML(_path).ToString();
             });
+            DeserializeXML.ThrownExceptions.Subscribe(ex => MessageBox.Show(ex.Message, "Внимание!"));
         }
-
         public ReactiveCommand<Unit, Unit> DeserializeXML { get; private set; }
+        public ReactiveCommand<Unit, Unit> ChooseFile { get; private set; }
     }
 }
